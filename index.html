@@ -95,6 +95,45 @@
     transition:transform .45s cubic-bezier(.2,.9,.3,1.3); white-space:nowrap;
   }
   #toast.show{transform:translateX(-50%) translateY(0);}
+
+  #sendPrank{
+    position:absolute; top:calc(14px + env(safe-area-inset-top, 0px)); right:14px; z-index:6;
+    display:flex; align-items:center; gap:7px; padding:9px 13px;
+    background:var(--panel); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    border:1px solid var(--hairline); border-radius:999px;
+    font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--diagnostic); cursor:pointer;
+  }
+  #sendPrank svg{width:14px; height:14px; stroke:var(--diagnostic); fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round;}
+  #sendPrank:active{background:rgba(255,255,255,0.08);}
+
+  #revealCard{
+    position:fixed; inset:0; z-index:30; display:flex; align-items:flex-end; justify-content:center;
+    background:rgba(4,4,6,0.55); opacity:0; pointer-events:none; transition:opacity .4s ease;
+  }
+  #revealCard.show{opacity:1; pointer-events:auto;}
+  #revealPanel{
+    width:100%; max-width:480px; background:var(--panel); backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px); border:1px solid var(--hairline);
+    border-radius:22px 22px 0 0; padding:26px 22px calc(26px + env(safe-area-inset-bottom, 0px));
+    transform:translateY(100%); transition:transform .5s cubic-bezier(.2,.9,.25,1.1);
+  }
+  #revealCard.show #revealPanel{transform:translateY(0);}
+  #revealPanel h2{margin:0 0 6px; font-size:20px; font-weight:600;}
+  #revealPanel p{margin:0 0 20px; color:var(--ink-dim); font-size:13.5px; line-height:1.5;}
+  #revealPanel .row{display:flex; flex-direction:column; gap:10px;}
+  .revealBtn{
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    padding:13px 16px; border-radius:13px; border:none; font-size:13.5px; font-weight:600;
+    cursor:pointer; font-family:var(--sys);
+  }
+  .revealBtn.primary{background:var(--diagnostic); color:var(--bg-deep);}
+  .revealBtn.secondary{background:rgba(255,255,255,0.08); color:var(--ink); border:1px solid var(--hairline);}
+  #revealPanel .affiliate{
+    display:block; margin-top:16px; text-align:center; font-family:var(--mono);
+    font-size:10.5px; letter-spacing:.08em; color:var(--ink-dim); text-decoration:none;
+  }
+  #revealPanel .affiliate b{color:var(--hazard); font-weight:600;}
 </style>
 </head>
 <body>
@@ -104,6 +143,24 @@
   <canvas id="crackCanvas"></canvas>
   <div id="sheen"></div>
   <div id="hint">Tap anywhere to crack</div>
+  <button id="sendPrank" title="Get a link that cracks someone else's screen">
+    <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.5 15.4 6.5"/><path d="M8.6 13.5 15.4 17.5"/></svg>
+    Send prank
+  </button>
+
+  <div id="revealCard">
+    <div id="revealPanel">
+      <h2>😏 Gotcha.</h2>
+      <p>Their screen just "cracked" — it's not real, just this page. Send it to the next person, or make your own.</p>
+      <div class="row">
+        <button class="revealBtn primary" id="revealSend">Send this to someone else</button>
+        <button class="revealBtn secondary" id="revealMake">Make my own</button>
+      </div>
+      <a class="affiliate" id="affiliateLink" href="#" target="_blank" rel="noopener">
+        Actually paranoid about cracks now? <b>Get a screen protector →</b>
+      </a>
+    </div>
+  </div>
 
   <div id="toolbar">
     <button class="btn" id="btnUpload" title="Set wallpaper">
@@ -153,6 +210,25 @@
   const btnIcons = document.getElementById('btnIcons');
   const btnShake = document.getElementById('btnShake');
   const fileInput = document.getElementById('fileInput');
+  const sendPrankBtn = document.getElementById('sendPrank');
+  const revealCard = document.getElementById('revealCard');
+  const revealSend = document.getElementById('revealSend');
+  const revealMake = document.getElementById('revealMake');
+  const affiliateLink = document.getElementById('affiliateLink');
+
+  // Swap this for your real Amazon Associates (or other affiliate) link
+  // once you're signed up — this is the only line that needs editing.
+  const AFFILIATE_URL = 'https://www.amazon.com/s?k=phone+screen+protector';
+  affiliateLink.href = AFFILIATE_URL;
+
+  // Best-effort, no-signup hit counter (countapi.xyz) so you can see whether
+  // the prank link is actually getting forwarded. Not authoritative — just a
+  // free directional signal. Fails silently if the service is unreachable.
+  function trackHit(key){
+    try{
+      fetch(`https://api.countapi.xyz/hit/shatter-app-ofordile/${key}`).catch(()=>{});
+    }catch(e){}
+  }
 
   let dpr = Math.min(window.devicePixelRatio || 1, 3);
   let W = 0, H = 0;
@@ -653,6 +729,51 @@
       showToast('Image saved');
     });
   });
+
+  // ---------- prank link: send ----------
+  function prankUrl(){
+    const u = new URL(location.href);
+    u.search = '';
+    u.searchParams.set('p', '1');
+    return u.toString();
+  }
+
+  async function sharePrank(){
+    const url = prankUrl();
+    const text = "Uh... is your screen okay?";
+    trackHit('prank-sent');
+    if (navigator.share){
+      try{ await navigator.share({ text, url }); return; }catch(e){ /* user cancelled, fall through */ }
+    }
+    try{
+      await navigator.clipboard.writeText(url);
+      showToast('Prank link copied — send it to someone', 2400);
+    }catch(e){
+      showToast(url, 4000);
+    }
+  }
+  sendPrankBtn.addEventListener('click', sharePrank);
+  revealSend.addEventListener('click', sharePrank);
+  revealMake.addEventListener('click', () => { location.href = location.pathname; });
+
+  // ---------- prank link: receive ----------
+  function runPrankSequence(){
+    trackHit('prank-opened');
+    hint.classList.add('hidden');
+    document.getElementById('toolbar').style.display = 'none';
+    sendPrankBtn.style.display = 'none';
+    const delay = rand(1400, 3800);
+    setTimeout(() => {
+      crackAt(W/2 + rand(-W*0.18,W*0.18), H*0.5 + rand(-H*0.12,H*0.12));
+      setTimeout(() => revealCard.classList.add('show'), 1300);
+    }, delay);
+  }
+
+  if (new URLSearchParams(location.search).get('p') === '1'){
+    runPrankSequence();
+  } else {
+    trackHit('visit');
+  }
 
   let toastTimer;
   function showToast(msg, duration=1600){
