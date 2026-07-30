@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>SHATTER STUDIO</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0b0b10">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230b0b10'/%3E%3Cpath d='M50 10 L44 40 L58 46 L38 62 L52 68 L30 90' stroke='%23f5f5f7' stroke-width='2.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjogIlNoYXR0ZXIgU3R1ZGlvIiwgInNob3J0X25hbWUiOiAiU2hhdHRlciIsICJkaXNwbGF5IjogImZ1bGxzY3JlZW4iLCAib3JpZW50YXRpb24iOiAicG9ydHJhaXQiLCAiYmFja2dyb3VuZF9jb2xvciI6ICIjMGIwYjEwIiwgInRoZW1lX2NvbG9yIjogIiMwYjBiMTAiLCAic3RhcnRfdXJsIjogIi4vIiwgImljb25zIjogW3sic3JjIjogImRhdGE6aW1hZ2Uvc3ZnK3htbCwlM0NzdmcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyB2aWV3Qm94PScwIDAgMTAwIDEwMCclM0UlM0NyZWN0IHdpZHRoPScxMDAnIGhlaWdodD0nMTAwJyBmaWxsPSclMjMwYjBiMTAnLyUzRSUzQ3BhdGggZD0nTTUwIDEwIEw0NCA0MCBMNTggNDYgTDM4IDYyIEw1MiA2OCBMMzAgOTAnIHN0cm9rZT0nJTIzZjVmNWY3JyBzdHJva2Utd2lkdGg9JzIuNCcgZmlsbD0nbm9uZScgc3Ryb2tlLWxpbmVjYXA9J3JvdW5kJyBzdHJva2UtbGluZWpvaW49J3JvdW5kJy8lM0UlM0Mvc3ZnJTNFIiwgInNpemVzIjogImFueSIsICJ0eXBlIjogImltYWdlL3N2Zyt4bWwiLCAicHVycG9zZSI6ICJhbnkifSwgeyJzcmMiOiAiZGF0YTppbWFnZS9zdmcreG1sLCUzQ3N2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxMDAgMTAwJyUzRSUzQ3JlY3Qgd2lkdGg9JzEwMCcgaGVpZ2h0PScxMDAnIGZpbGw9JyUyMzBiMGIxMCcvJTNFJTNDcGF0aCBkPSdNNTAgMTAgTDQ0IDQwIEw1OCA0NiBMMzggNjIgTDUyIDY4IEwzMCA5MCcgc3Ryb2tlPSclMjNmNWY1ZjcnIHN0cm9rZS13aWR0aD0nMi40JyBmaWxsPSdub25lJyBzdHJva2UtbGluZWNhcD0ncm91bmQnIHN0cm9rZS1saW5lam9pbj0ncm91bmQnLyUzRSUzQy9zdmclM0UiLCAic2l6ZXMiOiAiYW55IiwgInR5cGUiOiAiaW1hZ2Uvc3ZnK3htbCIsICJwdXJwb3NlIjogIm1hc2thYmxlIn1dfQ==">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep:#0b0b10;
+    --ink:#f5f5f7;
+    --ink-dim:rgba(245,245,247,0.5);
+    --diagnostic:#6fe3ff;
+    --hazard:#ffb020;
+    --panel:rgba(255,255,255,0.045);
+    --hairline:rgba(255,255,255,0.14);
+    --mono:'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+    --sys:-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{
+    margin:0; padding:0; width:100%; min-height:100vh; min-height:100dvh;
+    background:var(--bg-deep); font-family:var(--sys); color:var(--ink);
+  }
+  body{
+    display:flex; flex-direction:column; align-items:center;
+    padding:calc(56px + env(safe-area-inset-top,0px)) 22px calc(40px + env(safe-area-inset-bottom,0px));
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(111,227,255,0.10) 0%, rgba(111,227,255,0) 55%),
+      linear-gradient(180deg, #1b1330 0%, #0b0b10 40%, #08060b 100%);
+    min-height:100vh; min-height:100dvh;
+  }
+  .brand{
+    display:flex; align-items:center; gap:10px; margin-bottom:6px;
+  }
+  .brand svg{width:26px; height:26px; stroke:var(--ink); fill:none; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round;}
+  .brand h1{
+    margin:0; font-family:var(--mono); font-size:15px; letter-spacing:.32em;
+    text-transform:uppercase; font-weight:700;
+  }
+  .tagline{
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--ink-dim); margin:0 0 40px; text-align:center;
+  }
+  .cards{ width:100%; max-width:420px; display:flex; flex-direction:column; gap:14px; }
+  a.card{
+    display:flex; align-items:center; gap:16px; text-decoration:none; color:var(--ink);
+    padding:18px; border-radius:18px; background:var(--panel); border:1px solid var(--hairline);
+    backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+    transition:background .2s ease, transform .2s ease;
+  }
+  a.card:active{ background:rgba(255,255,255,0.08); transform:scale(0.985); }
+  .card-icon{
+    flex:0 0 auto; width:46px; height:46px; border-radius:13px;
+    display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(135deg, var(--diagnostic), #3f8ea8);
+  }
+  .card-icon svg{ width:22px; height:22px; stroke:var(--bg-deep); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+  .card-body{ flex:1 1 auto; min-width:0; }
+  .card-body h2{ margin:0 0 3px; font-size:15.5px; font-weight:600; }
+  .card-body p{ margin:0; font-size:12.5px; line-height:1.4; color:var(--ink-dim); }
+  .card-arrow{ flex:0 0 auto; color:var(--ink-dim); font-family:var(--mono); font-size:14px; }
+
+  .card.soon{ opacity:.55; pointer-events:none; }
+  .card.soon .card-icon{ background:rgba(255,255,255,0.10); }
+  .card.soon .card-icon svg{ stroke:var(--ink-dim); }
+
+  .footer{
+    margin-top:46px; text-align:center; font-family:var(--mono); font-size:9.5px;
+    letter-spacing:.1em; color:var(--ink-dim); text-transform:uppercase; opacity:.7;
+  }
+</style>
+</head>
+<body>
+
+  <div class="brand">
+    <svg viewBox="0 0 100 100"><path d="M50 10 L44 40 L58 46 L38 62 L52 68 L30 90"/></svg>
+    <h1>Shatter Studio</h1>
+  </div>
+  <p class="tagline">◆ Pocket illusions, tap to play</p>
+
+  <div class="cards">
+    <a class="card" href="./index.html">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><path d="M4 16.5V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10.5"/><path d="M4 16.5 9 11l3.5 3.5L16 11l4 4.5"/></svg>
+      </div>
+      <div class="card-body">
+        <h2>Shatter</h2>
+        <p>Tap-to-crack fake broken screen. Send a link that "breaks" a friend's phone.</p>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <a class="card" href="./shatter-live.html">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><path d="M4 7h3l2-2h6l2 2h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.5"/></svg>
+      </div>
+      <div class="card-body">
+        <h2>Shatter Live</h2>
+        <p>Same crack, live camera background. Hand someone your phone and watch their face.</p>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <div class="card soon">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+      </div>
+      <div class="card-body">
+        <h2>More coming</h2>
+        <p>New illusions land here first.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">shatter studio</div>
+
+<script>
+  // Best-effort, no-signup visit counter — same free service the apps use,
+  // so hub traffic and per-app traffic are directly comparable.
+  try{ fetch('https://api.countapi.xyz/hit/shatter-app-ofordile/studio-visit').catch(()=>{}); }catch(e){}
+</script>
+</body>
+</html>
