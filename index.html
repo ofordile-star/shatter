@@ -651,6 +651,14 @@
   });
 
   btnUpload.addEventListener('click', () => {
+    if (wallpaperImg){
+      // second tap: remove photo, revert to default background
+      wallpaperImg = null;
+      btnUpload.classList.remove('go');
+      drawBackground();
+      showToast('Photo removed');
+      return;
+    }
     if (!tipShown){
       tipShown = true;
       showToast('Tip: screenshot your real home screen first', 2600);
@@ -661,7 +669,7 @@
     const f = e.target.files[0];
     if (!f) return;
     const img = new Image();
-    img.onload = () => { wallpaperImg = img; drawBackground(); showToast('Wallpaper set'); };
+    img.onload = () => { wallpaperImg = img; btnUpload.classList.add('go'); drawBackground(); showToast('Wallpaper set'); };
     img.src = URL.createObjectURL(f);
   });
 
