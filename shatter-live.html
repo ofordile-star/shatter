@@ -58,6 +58,7 @@
   #toolbar{
     position:absolute; left:50%; bottom:calc(28px + env(safe-area-inset-bottom, 0px)); transform:translateX(-50%);
     z-index:5; display:flex; align-items:stretch; gap:1px;
+    max-width:calc(100vw - 28px - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px));
     background:var(--panel); backdrop-filter:blur(18px) saturate(140%);
     -webkit-backdrop-filter:blur(18px) saturate(140%);
     border:1px solid var(--hairline); border-radius:16px; overflow:hidden;
@@ -65,7 +66,7 @@
   }
   .btn{
     display:flex; flex-direction:column; align-items:center; justify-content:center;
-    gap:6px; width:54px; padding:10px 3px 9px; background:transparent; border:none;
+    gap:6px; flex:1 1 0; min-width:0; padding:10px 3px 9px; background:transparent; border:none;
     color:var(--ink); cursor:pointer; position:relative;
   }
   .btn:not(:last-child)::after{
@@ -95,7 +96,7 @@
   #toast.show{transform:translateX(-50%) translateY(0);}
 
   #sendPrank{
-    position:absolute; top:calc(14px + env(safe-area-inset-top, 0px)); right:14px; z-index:6;
+    position:absolute; top:calc(14px + env(safe-area-inset-top, 0px)); right:calc(18px + env(safe-area-inset-right, 0px)); z-index:6;
     display:flex; align-items:center; gap:7px; padding:9px 13px;
     background:var(--panel); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
     border:1px solid var(--hairline); border-radius:999px;
@@ -106,7 +107,7 @@
   #sendPrank:active{background:rgba(255,255,255,0.08);}
 
   #flipCam{
-    position:absolute; top:calc(14px + env(safe-area-inset-top, 0px)); left:14px; z-index:6;
+    position:absolute; top:calc(14px + env(safe-area-inset-top, 0px)); left:calc(18px + env(safe-area-inset-left, 0px)); z-index:6;
     display:none; align-items:center; gap:7px; padding:9px 13px;
     background:var(--panel); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
     border:1px solid var(--hairline); border-radius:999px;
@@ -158,6 +159,15 @@
     font-size:10.5px; letter-spacing:.08em; color:var(--ink-dim); text-decoration:none;
   }
   #revealPanel .affiliate b{color:var(--hazard); font-weight:600;}
+
+  #btnStudio{
+    position:absolute; left:calc(14px + env(safe-area-inset-left, 0px)); bottom:calc(28px + env(safe-area-inset-bottom, 0px));
+    z-index:5; width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    background:var(--panel); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    border:1px solid var(--hairline); text-decoration:none; opacity:.7;
+  }
+  #btnStudio svg{width:16px; height:16px; stroke:var(--ink); fill:none; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round;}
+  #btnStudio:active{opacity:1; background:rgba(255,255,255,0.08);}
 </style>
 </head>
 <body>
@@ -226,6 +236,9 @@
   <video id="camVideo" playsinline muted autoplay style="display:none;"></video>
   <div id="toast"></div>
   <div id="flash"></div>
+  <a id="btnStudio" href="./studio.html" title="More prank apps">
+    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.4"/><rect x="14" y="3" width="7" height="7" rx="1.4"/><rect x="3" y="14" width="7" height="7" rx="1.4"/><rect x="14" y="14" width="7" height="7" rx="1.4"/></svg>
+  </a>
 </div>
 
 <script>
@@ -252,6 +265,7 @@
   const revealSend = document.getElementById('revealSend');
   const revealMake = document.getElementById('revealMake');
   const affiliateLink = document.getElementById('affiliateLink');
+  const btnStudio = document.getElementById('btnStudio');
 
   // Swap this for your real Amazon Associates (or other affiliate) link
   // once you're signed up — this is the only line that needs editing.
@@ -870,6 +884,7 @@
     hint.classList.add('hidden');
     document.getElementById('toolbar').style.display = 'none';
     sendPrankBtn.style.display = 'none';
+    btnStudio.style.display = 'none';
     const delay = rand(1400, 3800);
     setTimeout(() => {
       crackAt(W/2 + rand(-W*0.18,W*0.18), H*0.5 + rand(-H*0.12,H*0.12));
