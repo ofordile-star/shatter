@@ -218,7 +218,11 @@
 
   // Swap this for your real Amazon Associates (or other affiliate) link
   // once you're signed up — this is the only line that needs editing.
-  const AFFILIATE_URL = 'https://www.amazon.com/s?k=phone+screen+protector';
+  const AFFILIATE_TAG = 'shatter00-20';
+  const ua = navigator.userAgent || '';
+  const isIOS = /iPhone|iPad|iPod/i.test(ua);
+  const searchTerm = isIOS ? 'ailun tempered glass screen protector' : 'tempered glass screen protector android';
+  const AFFILIATE_URL = 'https://www.amazon.com/s?k=' + encodeURIComponent(searchTerm) + '&tag=' + AFFILIATE_TAG;
   affiliateLink.href = AFFILIATE_URL;
 
   // Best-effort, no-signup hit counter (countapi.xyz) so you can see whether
